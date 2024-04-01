@@ -283,3 +283,29 @@ See the following link for details on INSERTs
     insert_into(<table>::table).values(<table>::<column>.eq("<your value>")).execute(conn)
     ```
     *Where* `conn` *is* `&mut MysqlConnection`
+4. For bulk inserts, just pass a tuple. The following is an example:
+    ```rust
+    insert_into(users::table)
+        .values(
+            (users::name.eq("George"), users::hair_color.eq("Brown")),
+            (users::name.eq("Trinity"), users::hair_color.eq("Light Brown"))
+        )
+        .execute(conn)
+    ```
+5. **Concerning** `Option` **fields**
+You can pass `Some(<value>)` or `None` directly to the `values` method and it will auto-populate the record with default values.
+    - [See Diesel's documentation here](https://diesel.rs/guides/all-about-inserts.html#:~:text=Once%20again%2C%20we%20can%20use%20an%20Option%20for%20any%20of%20the%20fields%20to%20insert%20DEFAULT.)
+    ```rust
+    insert_into(users)
+    .values(&vec![
+        (name.eq("Sean"), Some(hair_color.eq("Black"))),
+        (name.eq("Ruby"), None),
+    ])
+    .execute(conn)
+    ```
+
+6. Using Serde for serialization and deserialization
+    1. At top of file: `use serde::Deserialize`
+    2. 
+
+
