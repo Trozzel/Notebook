@@ -22,15 +22,17 @@ edition = "2021"
 [dependencies]
 diesel = { version = "2.1.0", features = ["mysql", "chrono"] }
 dotenvy = "0.15"
-chrono = "0.4"
+chrono = { version = "0.4", features = ["serde"] }
 serde = { version = "1.0.130", features = ["derive"] }
 serde_json = "1.0.68"
+serde_derive = "1.0.197"
+clap = { version = "4.5.4", features = ["derive"] }
 ```
 
 ## Installing Diesel CLI
 
 ```bash
-cargo isntall diesel_cli
+cargo install diesel_cli
 ```
 
 ## Setup Diesel for your project
@@ -113,6 +115,13 @@ diesel migration run
 
 ```rust
 // src/lib.rs
+
+// 1. Enable serialization and deserialization JSON objects
+#[macro_use]
+extern crate serde_derive;
+extern crate serde_json;
+extern crate serde;
+
 pub mod models;
 pub mod schema;
 
@@ -308,4 +317,16 @@ You can pass `Some(<value>)` or `None` directly to the `values` method and it wi
     1. At top of file: `use serde::Deserialize`
     2. 
 
+## Troubleshooting
 
+### Restore database to schemas if database is erased
+On the Diesel CLI host:
+```bash
+diesel database setup
+```
+
+### Reset database to no data
+On the Diesel CLI host:
+```bash
+diesel database reset
+```
